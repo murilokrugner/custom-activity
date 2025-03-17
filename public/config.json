@@ -1,0 +1,76 @@
+{
+  "workflowApiVersion": "1.1",
+  "metaData": {
+    "icon": "images/whatsapp.png",
+    "iconSmall": "images/whatsapp.png",
+    "category": "message"
+  },
+  "type": "REST",
+  "lang": {
+    "en-US": {
+      "name": "Central de Notificações",
+      "description": "POC Central de Notificações"
+    },
+    "pt-BR": {
+      "name": "Central de Notificações",
+      "description": "POC Central de Notificações"
+    }
+  },
+  "arguments": {
+    "execute": {
+      "inArguments": [],
+      "outArguments": [],
+      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/execute",
+      "verb": "POST",
+      "body": "",
+      "header": "",
+      "format": "json",
+      "useJwt": true,
+      "timeout": 10000
+    }
+  },
+  "configurationArguments": {
+    "applicationExtensionKey": "065843ec-a207-4837-b0c4-153c6a7080af",
+    "save": {
+      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/save",
+      "verb": "POST",
+      "useJwt": true
+    },
+    "publish": {
+      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/publish",
+      "verb": "POST",
+      "useJwt": true
+    },
+    "validate": {
+      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/validate",
+      "verb": "POST",
+      "useJwt": true
+    },
+    "stop": {
+      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/stop",
+      "verb": "POST",
+      "useJwt": true
+    }
+  },
+  "wizardSteps": [
+    {
+      "label": "Configure HSM Template",
+      "key": "step1"
+    }
+  ],
+  "userInterfaces": {
+    "configModal": {
+      "height": 600,
+      "width": 600,
+      "fullscreen": false
+    }
+  },
+  "schema": {
+    "arguments": {
+      "execute": {
+        "inArguments": [],
+        "outArguments": []
+      }
+    }
+  }
+}

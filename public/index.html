@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<title>POC Central de Notificações </title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+
+	<script data-main="js/main.js" type="text/javascript" src="js/require.js"></script>
+</head>
+
+<body>
+
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+			
+				<div class="login100-pic js-tilt" data-tilt>
+					<img src="images/img-01.png" alt="IMG">
+				</div>
+				<form id="notificationForm">
+					<span class="login100-form-title">
+						Cadastro de Notificações
+					</span>
+					<div class="wrap-input100 validate-input" data-validate="Digite o título">
+						<label for="title" class="label-form">Título</label>
+						<input class="input100 input-form" type="text" id="title" placeholder="Insira o título da notificação" required>
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-tag" aria-hidden="true"></i>
+						</span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Digite a mensagem">
+						<label for="message"  class="label-form">Mensagem</label>
+						<textarea class="input100 input-form" type="text" id="message" placeholder="Insira a mensagem da notificação"  required style="resize: vertical;"></textarea>
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-comment" aria-hidden="true"></i>
+						</span>
+					</div>
+	
+					<div class="wrap-input100">
+                    <label for="mediaUrl"  class="label-form">URL da Mídia</label>
+                        <input class="input100  input-form" type="url"  id="mediaUrl" 
+							placeholder="Insira a URL da mídia" required
+							pattern="https://.*" title="A URL deve começar com https://">
+                        <span class="focus-input100"></span>
+                    </div>
+				   <!-- Contêiner para a prévia da imagem -->
+					<div id="mediaPreviewContainer" style="display: none;">
+						<img id="mediaPreview" src="" alt="Prévia da Mídia" class="mediaPreview" />
+					</div>	
+
+                    <div class="wrap-input100">
+						<label for="navigationUrl"  class="label-form">URL de Navegação</label>
+                        <input class="input100  input-form" type="url" id="navigationUrl" 
+							placeholder="Insira a URL da navegação" required 
+							pattern="https://.*" title="A URL deve começar com https://">
+                        <span class="focus-input100"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate="Digite o Golden ID">
+						<label for="userId"class="label-form">ID do Usuário</label>
+                        <input class="input100 input-form" type="text" id="userId"  placeholder="Insira o ID do Usuário" required>
+                        <span class="focus-input100"></span>
+                    </div>
+
+                    <div class="wrap-input100">
+						<label for="templateCode" class="label-form">Template</label>
+                        <input class="input100 input-form" type="text" id="templateCode" placeholder="Insira o template" required>
+                        <span class="focus-input100"></span>
+                    </div>
+
+					<!-- Campo Business Unit (Bandeira) -->
+					<div class="wrap-input100 validate-input" data-validate="Selecione a bandeira">
+						<label class="label-form"> Escolha a Bandeira:</label>
+						<div>
+							<input type="radio" id="bandeira1" name="businessUnit" value="bandeira1" required>
+							<label for="bandeira1">Drogasil</label>
+						</div>
+						<div>
+							<input type="radio" id="bandeira2" name="businessUnit" value="bandeira2" required>
+							<label for="bandeira2">Droga Raia</label>
+						</div>
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="container-login100-form-btn">
+						<button id="toggleActive" class="login100-form-btn">
+							Cadastrar
+						</button>
+					</div>
+
+				
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
