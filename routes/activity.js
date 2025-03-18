@@ -1,12 +1,15 @@
 'use strict';
 
+// Importa módulos necessários
 const Path = require('path');
-const JWT = require(Path.join(__dirname, '..', 'lib', 'jwtDecoder.js'));
-const util = require('util');
-const axios = require('axios');
+const JWT = require(Path.join(__dirname, '..', 'lib', 'jwtDecoder.js')); // Para decodificar tokens JWT
+const util = require('util'); // Para inspeção de objetos (debug)
+const axios = require('axios'); // Para fazer requisições HTTP
 
+// Array para armazenar logs de execução (usado para debug ou exibição no index.js)
 exports.logExecuteData = [];
 
+// Função para logar dados detalhados de uma requisição (usada para debug)
 function logData(req) {
     exports.logExecuteData.push({
         body: req.body,
@@ -27,7 +30,8 @@ function logData(req) {
         secure: req.secure,
         originalUrl: req.originalUrl
     });
-    
+
+    // Exibe informações detalhadas da requisição no console
     console.log("body: " + util.inspect(req.body));
     console.log("headers: " + util.inspect(req.headers));
     console.log("trailers: " + req.trailers);
@@ -47,105 +51,114 @@ function logData(req) {
     console.log("originalUrl: " + req.originalUrl);
 }
 
+// Endpoint para lidar com solicitações de edição
 exports.edit = function (req, res) {
     console.log('edit request');
-    // logData(req);
+    logData(req);
     res.send(200, 'Edit');
 };
 
+// Endpoint para salvar a configuração da atividade
 exports.save = function (req, res) {
     console.log('save request');
-    // logData(req);
+    logData(req);
+    console.log('Dados enviados pela UI:', JSON.stringify(req.body));
     res.send(200, 'Save');
 };
 
+// Endpoint para executar a atividade (envia notificação ao app do cliente via middleware)
 exports.execute = function (req, res) {
-    // logData(req);
+    logData(req);
+    console.log('execute request:', JSON.stringify(req.body));
+
+    // Valida o token JWT
     JWT(req.body, process.env.jwtSecret, (err, decoded) => {
         if (err) {
-         //   console.error(err);
+            console.error('Erro ao validar JWT:', err);
             return res.status(401).end();
         }
 
-        // console.log('buffer hex', req.body.toString('hex'));
-
         if (decoded && decoded.inArguments && decoded.inArguments.length > 0) {
             var decodedArgs = decoded.inArguments[0];
-            // console.log('inArguments', JSON.stringify(decoded.inArguments));
-            // console.log('decodedArgs', JSON.stringify(decodedArgs));
+            console.log('inArguments:', JSON.stringify(decoded.inArguments));
 
-            const templateName = decodedArgs['templateName'];
-            const phoneNumber = decodedArgs['phoneNumber'];
-            const parameters = decodedArgs['parameters'];
-            const account = decodedArgs['account'];
+            const payload = {
+                template: decodedArgs['template'],
+                title: decodedArgs['title'],
+                message: decodedArgs['message'],
+                mediaUrl: decodedArgs['mediaUrl'],
+                url: decodedArgs['url'],
+                vucCode: decodedArgs['vucCode'], // Usado para identificar o usuário no app
+                brand: decodedArgs['brand']
+            };
 
-            console.log('Mensagem Cadastrada no MCE', templateName);
-      //      console.log('phoneNumber', phoneNumber);
-       //     console.log('parameters', parameters);
-       //     console.log('account', account);
+            console.log('Payload enviado ao middleware:', JSON.stringify(payload));
 
             const headers = {
                 'Content-Type': 'application/json',
-                'Authorization': `Key ${process.env.BLIPAUTHORIZATIONKEY}`
-            }
+                'Authorization': `Bearer ${process.env.MIDDLEWARE_AUTH_TOKEN}` // Substitua por token do middleware
+            };
 
-            const guid_id = uuidv4();
-
-            const post_save = {
-                "id": guid_id,
-                "to": "postmaster@wa.gw.msging.net",
-                "method": "get",
-                "uri": `lime://wa.gw.msging.net/accounts/+${phoneNumber}`
-            }
-
-            axios.post('https://msging.net/commands', post_save, { headers: headers }).then((res) => {
-                const post_hsm = {
-                    "id": guid_id,
-                    "to": `${phoneNumber}@wa.gw.msging.net`,
-                    "type": "application/json",
-                    "content": {
-                        "type": "hsm",
-                        "hsm": {
-                            "namespace": "0cf88f37_b88f_d3bd_b5be_f22588aabf89",
-                            "element_name": templateName,
-                            "language": {
-                                "policy": "deterministic",
-                                "code": "pt_BR"
-                            },
-                            "localizable_params": parameters.map(x => { return { 'default': x } })
-                        }
-                    }
-                }
-
-                axios.post('https://msging.net/messages', post_hsm, { headers: headers }).then((res) => {
-                    console.log(`Success send whatsapp to ${phoneNumber}`);
-                }).catch((err) => {
-                    console.error(`ERROR send whatsapp to ${phoneNumber}: ${err}`)
+            // Envia a notificação ao middleware (endpoint genérico, substitua pelo real)
+            axios.post('https://MUDAR_MIDDLEWARE_URL/api/notifications', payload, { headers: headers })
+                .then((response) => {
+                    console.log('Notificação enviada com sucesso ao app do cliente');
+                    res.send(200, 'Execute');
                 })
-            }).catch((err) => {
-                console.error(`ERROR verify whatsapp to ${phoneNumber}: ${err}`)
-            })
-
-            res.send(200, 'Execute');
+                .catch((err) => {
+                    console.error('Erro ao enviar notificação ao middleware:', err);
+                    res.status(500).send('Erro ao enviar notificação');
+                });
         } else {
-          //  console.error('inArguments invalid.');
+            console.error('inArguments inválidos.');
             return res.status(400).end();
         }
     });
 };
 
+// Endpoint para publicar a atividade
 exports.publish = function (req, res) {
- //   console.log('publish request');
-    // logData(req);
+    console.log('publish request');
+    logData(req);
     res.send(200, 'Publish');
 };
 
+// Endpoint para validar a atividade
 exports.validate = function (req, res) {
- //   console.log('validate request');
-    // logData(req);
+    console.log('validate request');
+    logData(req);
     res.send(200, 'Validate');
 };
 
+// Endpoint para buscar dados da Data Extension
+exports.getDataExtension = function (req, res) {
+    console.log('Requisição recebida em getDataExtension');
+
+    const authUrl = 'https://MUDAR_SUBDOMINIO.auth.marketingcloudapis.com/v2/token'; // Substitua pelo subdomínio correto
+    const dataExtensionUrl = 'https://MUDAR_SUBDOMINIO.rest.marketingcloudapis.com/data/v1/dataextensions/MUDAR_DE_KEY/rows'; // Substitua pela CustomerKey da DE
+
+    axios.post(authUrl, {
+        grant_type: 'client_credentials',
+        client_id: process.env.CLIENT_ID, // Configure no ambiente
+        client_secret: process.env.CLIENT_SECRET // Configure no ambiente
+    })
+    .then(response => {
+        const token = response.data.access_token;
+        return axios.get(dataExtensionUrl, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    })
+    .then(deResponse => {
+        console.log('Dados da Data Extension:', deResponse.data.items);
+        res.status(200).json(deResponse.data.items);
+    })
+    .catch(err => {
+        console.error('Erro ao buscar dados da Data Extension:', err);
+        res.status(500).send('Erro ao buscar dados da Data Extension');
+    });
+};
+
+// Função para gerar um UUID (usada no execute, mas mantida por compatibilidade)
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);

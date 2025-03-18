@@ -50,6 +50,11 @@
       "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/stop",
       "verb": "POST",
       "useJwt": true
+    },
+    "getDataExtension": {
+      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/getDataExtension",
+      "verb": "GET",
+      "useJwt": false
     }
   },
   "wizardSteps": [
@@ -60,6 +65,7 @@
   ],
   "userInterfaces": {
     "configModal": {
+      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/ui/index.html",
       "height": 600,
       "width": 600,
       "fullscreen": false
