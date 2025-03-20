@@ -1,0 +1,20 @@
+{
+    "name": "central-de-notificacoes",
+    "version": "1.0.0",
+    "description": "POC Central de Notificações",
+    "main": "app.js",
+    "scripts": {
+      "start": "node app.js"
+    },
+    "engines": {
+      "node": "18.x"
+    },
+    "dependencies": {
+      "express": "^4.17.1",
+      "body-parser": "^1.19.0",
+      "errorhandler": "^1.5.1",
+      "jsonwebtoken": "^9.0.0",
+      "axios": "^1.6.0",
+      "dotenv": "^16.0.0"
+    }
+  }
