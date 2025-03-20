@@ -94,6 +94,7 @@ exports.execute = function (req, res) {
 
             console.log('Payload enviado ao middleware:', JSON.stringify(payload));
 
+            
             const headers = {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${process.env.MIDDLEWARE_AUTH_TOKEN}` // Substitua por token do middleware
