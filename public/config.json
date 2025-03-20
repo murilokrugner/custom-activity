@@ -30,7 +30,7 @@
     }
   },
   "configurationArguments": {
-    "applicationExtensionKey": "3fda6bd7-0240-4273-827b-89d178e676b4",
+    "applicationExtensionKey": "356e0865-9556-4b50-b079-0220ab17e416",
     "save": {
       "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/save",
       "verb": "POST",
