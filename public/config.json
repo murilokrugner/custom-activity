@@ -30,7 +30,7 @@
     }
   },
   "configurationArguments": {
-    "applicationExtensionKey": "065843ec-a207-4837-b0c4-153c6a7080af",
+    "applicationExtensionKey": "3fda6bd7-0240-4273-827b-89d178e676b4",
     "save": {
       "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/save",
       "verb": "POST",
@@ -50,11 +50,6 @@
       "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/stop",
       "verb": "POST",
       "useJwt": true
-    },
-    "getDataExtension": {
-      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/getDataExtension",
-      "verb": "GET",
-      "useJwt": false
     }
   },
   "wizardSteps": [

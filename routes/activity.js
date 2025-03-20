@@ -88,7 +88,7 @@ exports.execute = function (req, res) {
                 message: decodedArgs['message'],
                 mediaUrl: decodedArgs['mediaUrl'],
                 url: decodedArgs['url'],
-                vucCode: decodedArgs['vucCode'], // Usado para identificar o usuário no app
+                vucCode: decodedArgs['vucCode'], // vucCode vindo da jornada
                 brand: decodedArgs['brand']
             };
 
@@ -100,7 +100,7 @@ exports.execute = function (req, res) {
             };
 
             // Envia a notificação ao middleware (endpoint genérico, substitua pelo real)
-            axios.post('https://MUDAR_MIDDLEWARE_URL/api/notifications', payload, { headers: headers })
+            axios.post('https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/api/notifications', payload, { headers: headers })
                 .then((response) => {
                     console.log('Notificação enviada com sucesso ao app do cliente');
                     res.send(200, 'Execute');
@@ -129,39 +129,3 @@ exports.validate = function (req, res) {
     logData(req);
     res.send(200, 'Validate');
 };
-
-// Endpoint para buscar dados da Data Extension
-exports.getDataExtension = function (req, res) {
-    console.log('Requisição recebida em getDataExtension');
-
-    const authUrl = 'https://MUDAR_SUBDOMINIO.auth.marketingcloudapis.com/v2/token'; // Substitua pelo subdomínio correto
-    const dataExtensionUrl = 'https://MUDAR_SUBDOMINIO.rest.marketingcloudapis.com/data/v1/dataextensions/MUDAR_DE_KEY/rows'; // Substitua pela CustomerKey da DE
-
-    axios.post(authUrl, {
-        grant_type: 'client_credentials',
-        client_id: process.env.CLIENT_ID, // Configure no ambiente
-        client_secret: process.env.CLIENT_SECRET // Configure no ambiente
-    })
-    .then(response => {
-        const token = response.data.access_token;
-        return axios.get(dataExtensionUrl, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-    })
-    .then(deResponse => {
-        console.log('Dados da Data Extension:', deResponse.data.items);
-        res.status(200).json(deResponse.data.items);
-    })
-    .catch(err => {
-        console.error('Erro ao buscar dados da Data Extension:', err);
-        res.status(500).send('Erro ao buscar dados da Data Extension');
-    });
-};
-
-// Função para gerar um UUID (usada no execute, mas mantida por compatibilidade)
-function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}

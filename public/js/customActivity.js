@@ -37,9 +37,6 @@ define(function (require) {
         // Solicita as interações da jornada
         connection.trigger('requestInteraction');
 
-        // Busca os dados da Data Extension ao carregar a UI
-        fetchDataExtension();
-
         // Adiciona um evento de clique ao botão "Cadastrar"
         $('#toggleActive').click(function (evt) {
             // Impede o comportamento padrão do formulário (recarregamento)
@@ -84,7 +81,7 @@ define(function (require) {
             $('#message').val(args.message || ''); // Preenche o campo mensagem
             $('#mediaUrl').val(args.mediaUrl || ''); // Preenche o campo URL da mídia
             $('#navigationUrl').val(args.url || ''); // Preenche o campo URL de navegação
-            $('#userId').val(args.vucCode || ''); // Preenche o campo ID do usuário
+            $('#userId').val(args.vucCode || ''); // Preenche o campo ID do usuário com vucCode da jornada
             $('#templateCode').val(args.template || ''); // Preenche o campo template
             $('input[name="businessUnit"][value="' + (args.brand || '') + '"]').prop('checked', true); // Seleciona a bandeira
 
@@ -118,20 +115,6 @@ define(function (require) {
         }
     }
 
-    // Função para buscar dados da Data Extension
-    function fetchDataExtension() {
-        // Faz uma requisição GET para o endpoint da Data Extension
-        $.get('https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/getDataExtension', function(data) {
-            // Se houver dados e o campo userId estiver vazio, preenche com o vucCode
-            if (data && data.length > 0 && !$('#userId').val()) {
-                $('#userId').val(data[0].vucCode || '');
-                console.log('vucCode preenchido:', data[0].vucCode);
-            }
-        }).fail(function(err) {
-            console.error('Erro ao buscar Data Extension:', err); // Loga erros na requisição
-        });
-    }
-
     // Função para salvar a configuração da atividade
     function save() {
         // Captura os valores dos campos do formulário
@@ -139,7 +122,7 @@ define(function (require) {
         var message = $("#message").val();
         var mediaUrl = $("#mediaUrl").val();
         var navigationUrl = $("#navigationUrl").val();
-        var userId = $("#userId").val();
+        var userId = $("#userId").val(); // Usará o vucCode da jornada, se fornecido
         var templateCode = $("#templateCode").val();
         var businessUnit = $("input[name='businessUnit']:checked").val();
 
@@ -148,7 +131,7 @@ define(function (require) {
         console.log("Message:", message);
         console.log("Media URL:", mediaUrl);
         console.log("Navigation URL:", navigationUrl);
-        console.log("User ID:", userId);
+        console.log("User ID (vucCode):", userId);
         console.log("Template Code:", templateCode);
         console.log("Business Unit:", businessUnit);
 
@@ -170,7 +153,7 @@ define(function (require) {
             "message": message,
             "mediaUrl": mediaUrl,
             "url": navigationUrl,
-            "vucCode": userId,
+            "vucCode": userId, // vucCode vindo da jornada ou do campo userId
             "brand": businessUnit
         }];
 
