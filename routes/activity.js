@@ -100,7 +100,7 @@ exports.execute = function (req, res) {
             };
 
             // Envia a notificação ao middleware (endpoint genérico, substitua pelo real)
-            axios.post('https://custom-d69328ac445f.herokuapp.com/api/notifications', payload, { headers: headers })
+            axios.post('https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging', payload, { headers: headers })
                 .then((response) => {
                     console.log('Notificação enviada com sucesso ao app do cliente');
                     res.send(200, 'Execute');
