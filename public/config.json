@@ -60,7 +60,7 @@
   ],
   "userInterfaces": {
     "configModal": {
-      //"url": "https://custom-a63854c09b8c.herokuapp.com/index.html",
+      "url": "https://custom-a63854c09b8c.herokuapp.com/index.html",
       "height": 600,
       "width": 600,
       "fullscreen": false
