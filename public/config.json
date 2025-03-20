@@ -20,7 +20,7 @@
     "execute": {
       "inArguments": [],
       "outArguments": [],
-      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/execute",
+      "url": "https://custom-d69328ac445f.herokuapp.com/journeybuilder/execute",
       "verb": "POST",
       "body": "",
       "header": "",
@@ -32,22 +32,22 @@
   "configurationArguments": {
     "applicationExtensionKey": "356e0865-9556-4b50-b079-0220ab17e416",
     "save": {
-      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/save",
+      "url": "https://custom-d69328ac445f.herokuapp.com/journeybuilder/save",
       "verb": "POST",
       "useJwt": true
     },
     "publish": {
-      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/publish",
+      "url": "https://custom-d69328ac445f.herokuapp.com/journeybuilder/publish",
       "verb": "POST",
       "useJwt": true
     },
     "validate": {
-      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/validate",
+      "url": "https://custom-d69328ac445f.herokuapp.com/journeybuilder/validate",
       "verb": "POST",
       "useJwt": true
     },
     "stop": {
-      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/stop",
+      "url": "https://custom-d69328ac445f.herokuapp.com/journeybuilder/stop",
       "verb": "POST",
       "useJwt": true
     }
@@ -60,7 +60,7 @@
   ],
   "userInterfaces": {
     "configModal": {
-      "url": "https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging/journeybuilder/ui/index.html",
+      "url": "https://custom-d69328ac445f.herokuapp.com/ui/index.html",
       "height": 600,
       "width": 600,
       "fullscreen": false
