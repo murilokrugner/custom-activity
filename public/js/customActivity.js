@@ -1,168 +1,126 @@
-'use strict';
+(function () {
+    'use strict';
 
-// Define o módulo usando RequireJS, carregando a biblioteca Postmonger
-define(function (require) {
-    // Importa a biblioteca Postmonger para comunicação com o Journey Builder
-    var Postmonger = require('postmonger');
-    // Cria uma nova sessão Postmonger para gerenciar eventos e mensagens
     var connection = new Postmonger.Session();
-
-    // Objeto que armazenará a configuração da atividade (payload)
     var payload = {};
-    // Armazena os tokens de autenticação recebidos do Journey Builder
-    var authTokens = {};
+    var schemaDE = [];
+    var dataDE = {};
 
-    // Variáveis globais para armazenar dados específicos
-    var eventDefinitionKey = null; // Armazena a chave do evento de entrada
-    var templateCode = null; // Armazena o código do template selecionado
-
-    // Inicializa a função quando a janela estiver pronta
     $(window).ready(onRender);
 
-    // Registra os eventos do Postmonger que a UI vai escutar
-    connection.on('initActivity', initialize); // Inicializa a atividade com dados existentes
-    connection.on('requestedTokens', onGetTokens); // Recebe os tokens de autenticação
-    connection.on('requestedEndpoints', onGetEndpoints); // Recebe os endpoints do Journey Builder
-    connection.on('requestedInteraction', requestedInteractionHandler); // Recebe a interação da jornada
-    connection.on('clickedNext', save); // Salva a configuração quando o usuário clica em "Próximo"
+    connection.on('initActivity', initialize);
+    connection.on('requestedSchema', requestedSchema);
+    connection.on('clickedNext', save);
 
-    // Função chamada quando a UI é renderizada
     function onRender() {
-        // Informa ao Journey Builder que a UI está pronta
         connection.trigger('ready');
-        // Solicita os tokens de autenticação
-        connection.trigger('requestTokens');
-        // Solicita os endpoints disponíveis
-        connection.trigger('requestEndpoints');
-        // Solicita as interações da jornada
-        connection.trigger('requestInteraction');
-
-        // Adiciona um evento de clique ao botão "Cadastrar"
-        $('#toggleActive').click(function (evt) {
-            // Impede o comportamento padrão do formulário (recarregamento)
-            evt.preventDefault();
-
-            // Desabilita o campo de template para evitar edições após o cadastro
-            document.getElementById('templateCode').disabled = true;
-            // Armazena o valor do template selecionado
-            templateCode = $('#templateCode').val();
-
-            // Desabilita o botão e muda o texto para "Cadastrado"
-            document.getElementById('toggleActive').disabled = true;
-            document.getElementById('toggleActive').innerHTML = "Cadastrado";
-
-            // Chama a função para salvar os dados
-            save();
-        });
+        connection.trigger('requestSchema');
     }
 
-    // Função chamada para inicializar a atividade com dados existentes
     function initialize(data) {
-        // Atualiza o payload com os dados recebidos, se houver
         if (data) {
             payload = data;
         }
 
-        // Inicializa a estrutura do payload se não existir
-        if (!payload['arguments']) {
-            payload['arguments'] = {};
-        }
-        if (!payload['arguments'].execute) {
-            payload['arguments'].execute = {};
-        }
-        if (!payload['metaData']) {
-            payload['metaData'] = {};
-        }
+        var hasInArguments = Boolean(
+            payload['arguments'] &&
+            payload['arguments'].execute &&
+            payload['arguments'].execute.inArguments &&
+            payload['arguments'].execute.inArguments.length > 0
+        );
 
-        // Carrega dados existentes do payload, se disponíveis
-        if (payload['arguments'].execute.inArguments && payload['arguments'].execute.inArguments.length > 0) {
-            var args = payload['arguments'].execute.inArguments[0];
-            $('#title').val(args.title || ''); // Preenche o campo título
-            $('#message').val(args.message || ''); // Preenche o campo mensagem
-            $('#mediaUrl').val(args.mediaUrl || ''); // Preenche o campo URL da mídia
-            $('#navigationUrl').val(args.url || ''); // Preenche o campo URL de navegação
-            $('#userId').val(args.vucCode || ''); // Preenche o campo ID do usuário com vucCode da jornada
-            $('#templateCode').val(args.template || ''); // Preenche o campo template
-            $('input[name="businessUnit"][value="' + (args.brand || '') + '"]').prop('checked', true); // Seleciona a bandeira
+        var inArguments = hasInArguments ? payload['arguments'].execute.inArguments : [];
 
-            // Se já houver um template, desabilita o campo e o botão
+        inArguments.forEach(function (args) {
             if (args.template) {
-                document.getElementById('templateCode').disabled = true;
-                document.getElementById('toggleActive').disabled = true;
-                document.getElementById('toggleActive').innerHTML = "Cadastrado";
+                $('#template').val(args.template);
+            }
+            if (args.title) {
+                $('#title').val(args.title);
+            }
+            if (args.message) {
+                $('#message').val(args.message);
+            }
+            if (args.mediaUrl) {
+                $('#mediaUrl').val(args.mediaUrl);
+            }
+            if (args.url) {
+                $('#url').val(args.url);
+            }
+            if (args.vucCode) {
+                $('#vucCode').val(args.vucCode);
+            }
+            if (args.vucCodeField) {
+                $('#vucCodeField').val(args.vucCodeField);
+            }
+            if (args.brand) {
+                $('#brand').val(args.brand);
+            }
+        });
+
+        $('#saveButton').click(function () {
+            connection.trigger('clickedNext');
+        });
+    }
+
+    function requestedSchema(data) {
+        if (data.error) {
+            console.error('requestedSchema Error:', data.error);
+        } else {
+            schemaDE = data['schema'];
+            console.log('Schema da Data Extension:', schemaDE);
+        }
+
+        // Limpa a lista suspensa antes de preenchê-la
+        $('#vucCodeField').empty();
+        $('#vucCodeField').append('<option value="">Selecione um campo da Data Extension</option>');
+
+        // Preenche a lista suspensa com os campos da Data Extension
+        for (var i in schemaDE) {
+            var name = schemaDE[i].name;
+            if (name) {
+                // Adiciona cada campo como uma opção na lista suspensa
+                $('#vucCodeField').append(`<option value="${name}">${name}</option>`);
+                // Armazena o nome do campo e sua chave para uso posterior
+                dataDE[name] = `{{${schemaDE[i].key}}}`;
             }
         }
     }
 
-    // Função chamada quando os tokens de autenticação são recebidos
-    function onGetTokens(tokens) {
-        authTokens = tokens; // Armazena os tokens recebidos
-    }
-
-    // Função chamada quando os endpoints são recebidos
-    function onGetEndpoints(endpoints) {
-        console.log('Endpoints:', endpoints); // Loga os endpoints para debug
-    }
-
-    // Função chamada quando a interação da jornada é recebida
-    function requestedInteractionHandler(settings) {
-        try {
-            // Tenta obter a chave do evento de entrada
-            eventDefinitionKey = settings.triggers[0].metaData.eventDefinitionKey;
-            document.getElementById('select-entryevent-defkey').value = eventDefinitionKey;
-        } catch (err) {
-            console.error('Erro ao obter eventDefinitionKey:', err); // Loga erros, se houver
-        }
-    }
-
-    // Função para salvar a configuração da atividade
     function save() {
-        // Captura os valores dos campos do formulário
-        var title = $("#title").val();
-        var message = $("#message").val();
-        var mediaUrl = $("#mediaUrl").val();
-        var navigationUrl = $("#navigationUrl").val();
-        var userId = $("#userId").val(); // Usará o vucCode da jornada, se fornecido
-        var templateCode = $("#templateCode").val();
-        var businessUnit = $("input[name='businessUnit']:checked").val();
+        var template = $('#template').val();
+        var title = $('#title').val();
+        var message = $('#message').val();
+        var mediaUrl = $('#mediaUrl').val();
+        var url = $('#url').val();
+        var vucCode = $('#vucCode').val(); // vucCode unitário
+        var vucCodeField = $('#vucCodeField').val(); // Campo selecionado da DE
+        var brand = $('#brand').val();
 
-        // Exibe os valores capturados no console para debug
-        console.log("Title:", title);
-        console.log("Message:", message);
-        console.log("Media URL:", mediaUrl);
-        console.log("Navigation URL:", navigationUrl);
-        console.log("User ID (vucCode):", userId);
-        console.log("Template Code:", templateCode);
-        console.log("Business Unit:", businessUnit);
-
-        // Garante que a estrutura do payload esteja correta antes de usar
-        if (!payload['arguments']) {
-            payload['arguments'] = {};
-        }
-        if (!payload['arguments'].execute) {
-            payload['arguments'].execute = {};
-        }
-        if (!payload['metaData']) {
-            payload['metaData'] = {};
+        // Validação básica
+        if (!template || !title || !message || !brand) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            connection.trigger('updateButton', { button: 'next', enabled: false });
+            return;
         }
 
-        // Define os argumentos de entrada no payload
+        // Monta os argumentos que serão enviados ao activity.js
+        payload['arguments'] = payload['arguments'] || {};
+        payload['arguments'].execute = payload['arguments'].execute || {};
         payload['arguments'].execute.inArguments = [{
-            "template": templateCode,
+            "template": template,
             "title": title,
             "message": message,
             "mediaUrl": mediaUrl,
-            "url": navigationUrl,
-            "vucCode": userId, // vucCode vindo da jornada ou do campo userId
-            "brand": businessUnit
+            "url": url,
+            "vucCode": vucCode, // Mantém o vucCode unitário
+            "vucCodeField": vucCodeField, // Adiciona o campo selecionado da DE
+            "brand": brand
         }];
 
-        // Marca a atividade como configurada
+        payload['metaData'] = payload['metaData'] || {};
         payload['metaData'].isConfigured = true;
 
-        // Exibe o payload completo no console para debug
-        console.log('Payload completo:', JSON.stringify(payload));
-        // Envia o payload atualizado para o Journey Builder
         connection.trigger('updateActivity', payload);
     }
-});
+})();

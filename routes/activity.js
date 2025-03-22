@@ -1,15 +1,12 @@
 'use strict';
 
-// Importa módulos necessários
 const Path = require('path');
-const JWT = require(Path.join(__dirname, '..', 'lib', 'jwtDecoder.js')); // Para decodificar tokens JWT
-const util = require('util'); // Para inspeção de objetos (debug)
-const axios = require('axios'); // Para fazer requisições HTTP
+const JWT = require(Path.join(__dirname, '..', 'lib', 'jwtDecoder.js'));
+const util = require('util');
+const axios = require('axios');
 
-// Array para armazenar logs de execução (usado para debug ou exibição no index.js)
 exports.logExecuteData = [];
 
-// Função para logar dados detalhados de uma requisição (usada para debug)
 function logData(req) {
     exports.logExecuteData.push({
         body: req.body,
@@ -31,7 +28,6 @@ function logData(req) {
         originalUrl: req.originalUrl
     });
 
-    // Exibe informações detalhadas da requisição no console
     console.log("body: " + util.inspect(req.body));
     console.log("headers: " + util.inspect(req.headers));
     console.log("trailers: " + req.trailers);
@@ -51,14 +47,12 @@ function logData(req) {
     console.log("originalUrl: " + req.originalUrl);
 }
 
-// Endpoint para lidar com solicitações de edição
 exports.edit = function (req, res) {
     console.log('edit request');
     logData(req);
     res.send(200, 'Edit');
 };
 
-// Endpoint para salvar a configuração da atividade
 exports.save = function (req, res) {
     console.log('save request');
     logData(req);
@@ -66,12 +60,10 @@ exports.save = function (req, res) {
     res.send(200, 'Save');
 };
 
-// Endpoint para executar a atividade (envia notificação ao app do cliente via middleware)
 exports.execute = function (req, res) {
     logData(req);
     console.log('execute request:', JSON.stringify(req.body));
 
-    // Valida o token JWT
     JWT(req.body, process.env.jwtSecret, (err, decoded) => {
         if (err) {
             console.error('Erro ao validar JWT:', err);
@@ -82,33 +74,61 @@ exports.execute = function (req, res) {
             var decodedArgs = decoded.inArguments[0];
             console.log('inArguments:', JSON.stringify(decoded.inArguments));
 
+            // Determina o vucCode a ser usado
+            let vucCode;
+
+            // Prioridade 1: Usa o campo da Data Extension, se selecionado
+            if (decodedArgs['vucCodeField']) {
+                const vucCodeField = decodedArgs['vucCodeField'];
+                // O valor do campo da DE já vem resolvido no decodedArgs (ex.: "GhkbB3IBQ9NHV0ertAD-")
+                vucCode = decodedArgs[vucCodeField];
+                console.log(`Usando vucCode da Data Extension (campo ${vucCodeField}): ${vucCode}`);
+            }
+
+            // Prioridade 2: Usa o vucCode unitário, se preenchido
+            // *** INÍCIO DA LÓGICA DO VUCCODE UNITÁRIO ***
+            if (!vucCode && decodedArgs['vucCode']) {
+                vucCode = decodedArgs['vucCode'];
+                console.log(`Usando vucCode unitário: ${vucCode}`);
+            }
+            // *** FIM DA LÓGICA DO VUCCODE UNITÁRIO ***
+
+            // Validação: Garante que o vucCode esteja presente
+            if (!vucCode) {
+                console.error('vucCode não encontrado. Selecione um campo da Data Extension ou insira um vucCode unitário.');
+                return res.status(400).send('vucCode é obrigatório.');
+            }
+
             const payload = {
                 template: decodedArgs['template'],
                 title: decodedArgs['title'],
                 message: decodedArgs['message'],
                 mediaUrl: decodedArgs['mediaUrl'],
                 url: decodedArgs['url'],
-                vucCode: decodedArgs['vucCode'], // vucCode vindo da jornada
+                vucCode: vucCode,
                 brand: decodedArgs['brand']
             };
 
             console.log('Payload enviado ao middleware:', JSON.stringify(payload));
 
-            
             const headers = {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.MIDDLEWARE_AUTH_TOKEN}` // Substitua por token do middleware
+                'Authorization': `Bearer ${process.env.MIDDLEWARE_AUTH_TOKEN}`
             };
 
-            // Envia a notificação ao middleware (endpoint genérico, substitua pelo real)
-            axios.post('https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging', payload, { headers: headers })
+            // Responde imediatamente ao Journey Builder
+            res.send(200, 'Execute');
+
+            // Envia a notificação ao middleware em segundo plano
+            axios.post('https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging', payload, { 
+                headers: headers,
+                timeout: 10000
+            })
                 .then((response) => {
                     console.log('Notificação enviada com sucesso ao app do cliente');
-                    res.send(200, 'Execute');
                 })
                 .catch((err) => {
                     console.error('Erro ao enviar notificação ao middleware:', err);
-                    res.status(500).send('Erro ao enviar notificação');
                 });
         } else {
             console.error('inArguments inválidos.');
@@ -117,14 +137,12 @@ exports.execute = function (req, res) {
     });
 };
 
-// Endpoint para publicar a atividade
 exports.publish = function (req, res) {
     console.log('publish request');
     logData(req);
     res.send(200, 'Publish');
 };
 
-// Endpoint para validar a atividade
 exports.validate = function (req, res) {
     console.log('validate request');
     logData(req);
