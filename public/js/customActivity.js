@@ -53,13 +53,15 @@
             if (args.vucCodeField) {
                 $('#vucCodeField').val(args.vucCodeField);
             }
-            if (args.brand) {
-                $('#brand').val(args.brand);
+            if (args.businessUnit) {
+                $(`input[name="businessUnit"][value="${args.businessUnit}"]`).prop('checked', true);
             }
         });
 
-        $('#saveButton').click(function () {
-            connection.trigger('clickedNext');
+        // Adiciona o evento de clique no botão "Cadastrar"
+        $('#toggleActive').click(function (e) {
+            e.preventDefault();
+            save();
         });
     }
 
@@ -79,9 +81,7 @@
         for (var i in schemaDE) {
             var name = schemaDE[i].name;
             if (name) {
-                // Adiciona cada campo como uma opção na lista suspensa
                 $('#vucCodeField').append(`<option value="${name}">${name}</option>`);
-                // Armazena o nome do campo e sua chave para uso posterior
                 dataDE[name] = `{{${schemaDE[i].key}}}`;
             }
         }
@@ -93,12 +93,12 @@
         var message = $('#message').val();
         var mediaUrl = $('#mediaUrl').val();
         var url = $('#url').val();
-        var vucCode = $('#vucCode').val(); // vucCode unitário
-        var vucCodeField = $('#vucCodeField').val(); // Campo selecionado da DE
-        var brand = $('#brand').val();
+        var vucCode = $('#vucCode').val();
+        var vucCodeField = $('#vucCodeField').val();
+        var businessUnit = $('input[name="businessUnit"]:checked').val();
 
         // Validação básica
-        if (!template || !title || !message || !brand) {
+        if (!template || !title || !message || !businessUnit) {
             alert('Por favor, preencha todos os campos obrigatórios.');
             connection.trigger('updateButton', { button: 'next', enabled: false });
             return;
@@ -113,14 +113,15 @@
             "message": message,
             "mediaUrl": mediaUrl,
             "url": url,
-            "vucCode": vucCode, // Mantém o vucCode unitário
-            "vucCodeField": vucCodeField, // Adiciona o campo selecionado da DE
-            "brand": brand
+            "vucCode": vucCode,
+            "vucCodeField": vucCodeField,
+            "businessUnit": businessUnit
         }];
 
         payload['metaData'] = payload['metaData'] || {};
         payload['metaData'].isConfigured = true;
 
+        console.log('Salvando payload:', JSON.stringify(payload));
         connection.trigger('updateActivity', payload);
     }
 })();

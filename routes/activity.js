@@ -80,7 +80,6 @@ exports.execute = function (req, res) {
             // Prioridade 1: Usa o campo da Data Extension, se selecionado
             if (decodedArgs['vucCodeField']) {
                 const vucCodeField = decodedArgs['vucCodeField'];
-                // O valor do campo da DE já vem resolvido no decodedArgs (ex.: "GhkbB3IBQ9NHV0ertAD-")
                 vucCode = decodedArgs[vucCodeField];
                 console.log(`Usando vucCode da Data Extension (campo ${vucCodeField}): ${vucCode}`);
             }
@@ -106,7 +105,7 @@ exports.execute = function (req, res) {
                 mediaUrl: decodedArgs['mediaUrl'],
                 url: decodedArgs['url'],
                 vucCode: vucCode,
-                brand: decodedArgs['brand']
+                businessUnit: decodedArgs['businessUnit']
             };
 
             console.log('Payload enviado ao middleware:', JSON.stringify(payload));

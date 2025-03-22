@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Ícone da aba do navegador -->
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="images/icons/favicon.ico" />
 
     <!-- Arquivos CSS -->
@@ -65,7 +65,7 @@
                         <span class="focus-input100"></span>
                     </div>
 
-                    <!-- Campo para vucCode unitário (antigo userId) -->
+                    <!-- Campo para vucCode unitário -->
                     <div class="wrap-input100 validate-input" data-validate="Digite o vucCode">
                         <label for="vucCode" class="label-form">vucCode (Unitário)</label>
                         <input class="input100 input-form" type="text" id="vucCode" placeholder="Insira o vucCode para disparo individual">
@@ -84,9 +84,17 @@
                         <span class="focus-input100"></span>
                     </div>
 
-                    <div class="wrap-input100 validate-input" data-validate="Digite a marca">
-                        <label for="brand" class="label-form">Marca</label>
-                        <input class="input100 input-form" type="text" id="brand" placeholder="Insira a marca" required>
+                    <!-- Campo Business Unit (Bandeira) restaurado -->
+                    <div class="wrap-input100 validate-input" data-validate="Selecione a bandeira">
+                        <label class="label-form">Escolha a Bandeira:</label>
+                        <div>
+                            <input type="radio" id="bandeira1" name="businessUnit" value="bandeira1" required>
+                            <label for="bandeira1">Bandeira1</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="bandeira2" name="businessUnit" value="bandeira2" required>
+                            <label for="bandeira2">bandeira2</label>
+                        </div>
                         <span class="focus-input100"></span>
                     </div>
 
