@@ -70,7 +70,7 @@
             console.error('requestedSchema Error:', data.error);
         } else {
             schemaDE = data['schema'];
-            console.log('Schema da Data Extension:', schemaDE);
+            console.log('Schema da Data Extension:', JSON.stringify(schemaDE));
         }
 
         // Limpa a lista suspensa antes de preenchê-la
@@ -82,7 +82,7 @@
             var name = schemaDE[i].name;
             if (name) {
                 $('#vucCodeField').append(`<option value="${name}">${name}</option>`);
-                dataDE[name] = `{{${schemaDE[i].key}}}`;
+                dataDE[name] = `{{${schemaDE[i].key}}}`; // Armazena o formato completo (ex.: {{Event.DEAudience-123.vucCode}})
             }
         }
     }
@@ -114,7 +114,7 @@
             "mediaUrl": mediaUrl,
             "url": url,
             "vucCode": vucCode,
-            "vucCodeField": vucCodeField,
+            "vucCodeField": vucCodeField ? dataDE[vucCodeField] : "", // Salva no formato {{Event.DEAudience-123.vucCode}}
             "businessUnit": businessUnit
         }];
 
