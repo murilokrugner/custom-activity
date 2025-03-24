@@ -74,14 +74,24 @@ exports.execute = function (req, res) {
             var decodedArgs = decoded.inArguments[0];
             console.log('inArguments:', JSON.stringify(decoded.inArguments));
 
+            // Log adicional para inspecionar todas as chaves disponíveis no decodedArgs
+            console.log('Todas as chaves do decodedArgs:', Object.keys(decodedArgs));
+
             // Determina o vucCode a ser usado
             let vucCode;
 
             // Prioridade 1: Usa o campo da Data Extension, se selecionado
             if (decodedArgs['vucCodeField']) {
                 const vucCodeField = decodedArgs['vucCodeField'];
-                vucCode = decodedArgs[vucCodeField];
-                console.log(`Usando vucCode da Data Extension (campo ${vucCodeField}): ${vucCode}`);
+                console.log(`Tentando acessar o campo da DE: ${vucCodeField}`);
+
+                // Verifica se o campo existe no decodedArgs
+                if (vucCodeField in decodedArgs) {
+                    vucCode = decodedArgs[vucCodeField];
+                    console.log(`Usando vucCode da Data Extension (campo ${vucCodeField}): ${vucCode}`);
+                } else {
+                    console.error(`Campo ${vucCodeField} não encontrado no decodedArgs. Chaves disponíveis:`, Object.keys(decodedArgs));
+                }
             }
 
             // Prioridade 2: Usa o vucCode unitário, se preenchido
