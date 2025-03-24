@@ -47,11 +47,14 @@
             if (args.url) {
                 $('#url').val(args.url);
             }
+            // Comentado: Removendo referência ao vucCode unitário
+            /*
             if (args.vucCode) {
                 $('#vucCode').val(args.vucCode);
             }
-            if (args.vucCodeField) {
-                $('#vucCodeField').val(args.vucCodeField);
+            */
+            if (args.vucCode) { // Alterado de vucCodeField para vucCode
+                $('#vucCodeField').val(args.vucCode);
             }
             if (args.businessUnit) {
                 $(`input[name="businessUnit"][value="${args.businessUnit}"]`).prop('checked', true);
@@ -85,7 +88,7 @@
             if (name && key) {
                 console.log(`Adicionando campo à lista suspensa: name=${name}, key=${key}`);
                 $('#vucCodeField').append(`<option value="${name}">${name}</option>`);
-                dataDE[name] = `{{${key}}}`; // Armazena o formato completo (ex.: {{Event.DEAudience-123.vucCode}})
+                dataDE[name] = `{{${key}}}`; // Armazena o formato completo (ex.: {{Event.DEAudience-123.ID}})
             }
         }
 
@@ -98,8 +101,9 @@
         var message = $('#message').val();
         var mediaUrl = $('#mediaUrl').val();
         var url = $('#url').val();
-        var vucCode = $('#vucCode').val();
-        var vucCodeField = $('#vucCodeField').val();
+        // Comentado: Removendo referência ao vucCode unitário
+        // var vucCode = $('#vucCode').val();
+        var vucCodeField = $('#vucCodeField').val(); // Ainda usamos vucCodeField como ID do elemento na UI
         var businessUnit = $('input[name="businessUnit"]:checked').val();
 
         // Validação básica
@@ -122,8 +126,9 @@
             "message": message,
             "mediaUrl": mediaUrl,
             "url": url,
-            "vucCode": vucCode,
-            "vucCodeField": vucCodeField ? dataDE[vucCodeField] : "", // Salva no formato {{Event.DEAudience-123.vucCode}}
+            // Comentado: Removendo referência ao vucCode unitário
+            // "vucCode": vucCode, // Placeholder: Se precisar reativar o vucCode unitário no futuro, descomente esta linha
+            "vucCode": vucCodeField ? dataDE[vucCodeField] : "", // Alterado de vucCodeField para vucCode, salva no formato {{Event.DEAudience-123.ID}}
             "businessUnit": businessUnit
         }];
 

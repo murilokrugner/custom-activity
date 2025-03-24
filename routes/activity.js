@@ -80,33 +80,24 @@ exports.execute = function (req, res) {
             // Determina o vucCode a ser usado
             let vucCode;
 
-            // Prioridade 1: Usa o campo da Data Extension, se selecionado
-            if (decodedArgs['vucCodeField']) {
-                // Extrai o nome do campo do formato {{Event.DEAudience-123.vucCode}}
-                const vucCodeField = decodedArgs['vucCodeField'].match(/\.([^.]+)\}\}$/);
-                const fieldName = vucCodeField ? vucCodeField[1] : decodedArgs['vucCodeField'];
-                console.log(`Tentando acessar o campo da DE: ${fieldName}`);
-
-                // Verifica se o campo existe no decodedArgs
-                if (fieldName in decodedArgs) {
-                    vucCode = decodedArgs[fieldName];
-                    console.log(`Usando vucCode da Data Extension (campo ${fieldName}): ${vucCode}`);
-                } else {
-                    console.error(`Campo ${fieldName} não encontrado no decodedArgs. Chaves disponíveis:`, Object.keys(decodedArgs));
-                }
+            // Usa o valor do vucCode diretamente do decodedArgs
+            if (decodedArgs['vucCode']) {
+                vucCode = decodedArgs['vucCode'];
+                console.log(`Usando vucCode da Data Extension: ${vucCode}`);
             }
 
+            // Comentado: Removendo lógica do vucCode unitário
+            /*
             // Prioridade 2: Usa o vucCode unitário, se preenchido
-            // *** INÍCIO DA LÓGICA DO VUCCODE UNITÁRIO ***
             if (!vucCode && decodedArgs['vucCode']) {
                 vucCode = decodedArgs['vucCode'];
                 console.log(`Usando vucCode unitário: ${vucCode}`);
             }
-            // *** FIM DA LÓGICA DO VUCCODE UNITÁRIO ***
+            */
 
             // Validação: Garante que o vucCode esteja presente
             if (!vucCode) {
-                console.error('vucCode não encontrado. Selecione um campo da Data Extension ou insira um vucCode unitário.');
+                console.error('vucCode não encontrado. Selecione um campo da Data Extension.');
                 return res.status(400).send('vucCode é obrigatório.');
             }
 
