@@ -79,12 +79,17 @@
 
         // Preenche a lista suspensa com os campos da Data Extension
         for (var i in schemaDE) {
-            var name = schemaDE[i].name;
-            if (name) {
+            var field = schemaDE[i];
+            var name = field.name;
+            var key = field.key;
+            if (name && key) {
+                console.log(`Adicionando campo à lista suspensa: name=${name}, key=${key}`);
                 $('#vucCodeField').append(`<option value="${name}">${name}</option>`);
-                dataDE[name] = `{{${schemaDE[i].key}}}`; // Armazena o formato completo (ex.: {{Event.DEAudience-123.vucCode}})
+                dataDE[name] = `{{${key}}}`; // Armazena o formato completo (ex.: {{Event.DEAudience-123.vucCode}})
             }
         }
+
+        console.log('dataDE após preenchimento:', JSON.stringify(dataDE));
     }
 
     function save() {
@@ -103,6 +108,10 @@
             connection.trigger('updateButton', { button: 'next', enabled: false });
             return;
         }
+
+        // Log para depurar o valor selecionado
+        console.log('Valor selecionado no vucCodeField:', vucCodeField);
+        console.log('Valor correspondente no dataDE:', vucCodeField ? dataDE[vucCodeField] : 'N/A');
 
         // Monta os argumentos que serão enviados ao activity.js
         payload['arguments'] = payload['arguments'] || {};
