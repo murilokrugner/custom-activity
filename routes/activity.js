@@ -50,14 +50,14 @@ function logData(req) {
 exports.edit = function (req, res) {
     console.log('edit request');
     logData(req);
-    res.send(200, 'Edit');
+    res.status(200).send('Edit');
 };
 
 exports.save = function (req, res) {
     console.log('save request');
     logData(req);
     console.log('Dados enviados pela UI:', JSON.stringify(req.body));
-    res.send(200, 'Save');
+    res.status(200).send('Save');
 };
 
 exports.execute = function (req, res) {
@@ -82,15 +82,17 @@ exports.execute = function (req, res) {
 
             // Prioridade 1: Usa o campo da Data Extension, se selecionado
             if (decodedArgs['vucCodeField']) {
-                const vucCodeField = decodedArgs['vucCodeField'];
-                console.log(`Tentando acessar o campo da DE: ${vucCodeField}`);
+                // Extrai o nome do campo do formato {{Event.DEAudience-123.vucCode}}
+                const vucCodeField = decodedArgs['vucCodeField'].match(/\.([^.]+)\}\}$/);
+                const fieldName = vucCodeField ? vucCodeField[1] : decodedArgs['vucCodeField'];
+                console.log(`Tentando acessar o campo da DE: ${fieldName}`);
 
                 // Verifica se o campo existe no decodedArgs
-                if (vucCodeField in decodedArgs) {
-                    vucCode = decodedArgs[vucCodeField];
-                    console.log(`Usando vucCode da Data Extension (campo ${vucCodeField}): ${vucCode}`);
+                if (fieldName in decodedArgs) {
+                    vucCode = decodedArgs[fieldName];
+                    console.log(`Usando vucCode da Data Extension (campo ${fieldName}): ${vucCode}`);
                 } else {
-                    console.error(`Campo ${vucCodeField} não encontrado no decodedArgs. Chaves disponíveis:`, Object.keys(decodedArgs));
+                    console.error(`Campo ${fieldName} não encontrado no decodedArgs. Chaves disponíveis:`, Object.keys(decodedArgs));
                 }
             }
 
@@ -126,7 +128,7 @@ exports.execute = function (req, res) {
             };
 
             // Responde imediatamente ao Journey Builder
-            res.send(200, 'Execute');
+            res.status(200).send('Execute');
 
             // Envia a notificação ao middleware em segundo plano
             axios.post('https://api-rd-internal-stg.raiadrogasil.io/v1/api/msatomjavacommunication/custom-messaging', payload, { 
@@ -137,7 +139,7 @@ exports.execute = function (req, res) {
                     console.log('Notificação enviada com sucesso ao app do cliente');
                 })
                 .catch((err) => {
-                    console.error('Erro ao enviar notificação ao middleware:', err);
+                    console.error('Erro ao enviar notificação ao middleware:', err.message);
                 });
         } else {
             console.error('inArguments inválidos.');
@@ -149,11 +151,11 @@ exports.execute = function (req, res) {
 exports.publish = function (req, res) {
     console.log('publish request');
     logData(req);
-    res.send(200, 'Publish');
+    res.status(200).send('Publish');
 };
 
 exports.validate = function (req, res) {
     console.log('validate request');
     logData(req);
-    res.send(200, 'Validate');
+    res.status(200).send('Validate');
 };
