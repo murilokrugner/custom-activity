@@ -20,7 +20,7 @@
     "execute": {
       "inArguments": [],
       "outArguments": [],
-      "url": "https://77c2-2804-e8-19d-5600-c05d-ce13-4e58-3adb.ngrok-free.app/journeybuilder/execute",
+      "url": "https://67ec624d3ff8f30008ab94d8--my-ca.netlify.app/journeybuilder/execute",
       "verb": "POST",
       "body": "",
       "header": "",
@@ -32,22 +32,22 @@
   "configurationArguments": {
     "applicationExtensionKey": "356e0865-9556-4b50-b079-0220ab17e416",
     "save": {
-      "url": "https://77c2-2804-e8-19d-5600-c05d-ce13-4e58-3adb.ngrok-free.app/journeybuilder/save",
+      "url": "https://67ec624d3ff8f30008ab94d8--my-ca.netlify.app/journeybuilder/save",
       "verb": "POST",
       "useJwt": true
     },
     "publish": {
-      "url": "https://77c2-2804-e8-19d-5600-c05d-ce13-4e58-3adb.ngrok-free.app/journeybuilder/publish",
+      "url": "https://67ec624d3ff8f30008ab94d8--my-ca.netlify.app/journeybuilder/publish",
       "verb": "POST",
       "useJwt": true
     },
     "validate": {
-      "url": "https://77c2-2804-e8-19d-5600-c05d-ce13-4e58-3adb.ngrok-free.app/journeybuilder/validate",
+      "url": "https://67ec624d3ff8f30008ab94d8--my-ca.netlify.app/journeybuilder/validate",
       "verb": "POST",
       "useJwt": true
     },
     "stop": {
-      "url": "https://77c2-2804-e8-19d-5600-c05d-ce13-4e58-3adb.ngrok-free.app/journeybuilder/stop",
+      "url": "https://67ec624d3ff8f30008ab94d8--my-ca.netlify.app/journeybuilder/stop",
       "verb": "POST",
       "useJwt": true
     }
@@ -60,7 +60,7 @@
   ],
   "userInterfaces": {
     "configModal": {
-      "url": "https://77c2-2804-e8-19d-5600-c05d-ce13-4e58-3adb.ngrok-free.app/index.html",
+      "url": "https://67ec624d3ff8f30008ab94d8--my-ca.netlify.app/index.html",
       "height": 600,
       "width": 600,
       "fullscreen": false
