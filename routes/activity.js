@@ -86,7 +86,7 @@ exports.execute = function (req, res) {
                 console.log(`Usando vucCode da Data Extension: ${vucCode}`);
             }
 
-            // Comentado: Removendo lógica do vucCode unitário
+            // Removendo lógica do vucCode unitário
             /*
             // Prioridade 2: Usa o vucCode unitário, se preenchido
             if (!vucCode && decodedArgs['vucCode']) {
@@ -115,7 +115,7 @@ exports.execute = function (req, res) {
 
             const headers = {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.MIDDLEWARE_AUTH_TOKEN}`
+                'Authorization': `Basic ${process.env.MIDDLEWARE_AUTH_TOKEN}`
             };
 
             // Responde imediatamente ao Journey Builder

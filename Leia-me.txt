@@ -1,0 +1,48 @@
+Olá,
+
+Essa é uma Custom Activity para Marketing Cloud capaz de enviar mensagens para uma central de notificação.
+
+Atenção!
+
+- Todos os arquivos e pastas dessa C.A são importantes e não devem ser removidos.
+- Certifique-se de que o servidor está configurado corretamente com as variáveis de ambiente necessárias (como `jwtSecret` e `MIDDLEWARE_AUTH_TOKEN`). (MIDDLEWARE_AUTH_TOKEN é o token do endpoint).
+
+Resumo Rápido:
+
+- customActivity.js: onde você monta o payload que será enviado ao Journey Builder. Este arquivo é responsável por capturar os dados inseridos na UI (como template, título, mensagem, etc.) e o `vucCode` da Data Extension (DE), salvando-os no formato correto (ex.: `{{Event.DEAudience-123.vucCode}}`) para que o Journey Builder resolva o valor.
+
+- config.json: contém o `applicationExtensionKey`, que você precisa obter na configuração da Custom Activity no Marketing Cloud. Este arquivo também define os endpoints da Custom Activity (como `/execute`, `/save`, etc.) e as permissões necessárias.
+
+- activity.js: processa o payload recebido do Journey Builder (via `/execute`) e envia a notificação ao middleware. Este arquivo valida o JWT, extrai o `vucCode` da DE do `decodedArgs`, e faz a requisição POST para o middleware com o payload final.
+
+- index.html: define a interface de usuário (UI) da Custom Activity no Journey Builder. Contém os campos para inserir o template, título, mensagem, URL da mídia, URL, e selecionar o campo da DE que contém o `vucCode`. O campo "vucCode (Unitário)" foi removido, e agora o `vucCode` é obtido exclusivamente da DE.
+
+- jwtDecoder.js: utilitário para decodificar e validar o JWT enviado pelo Journey Builder. Este arquivo é essencial para garantir a segurança da comunicação entre o Journey Builder e a Custom Activity.
+
+- Outros arquivos (CSS, JS, etc.): arquivos de suporte para a UI (estilos, scripts como jQuery, Postmonger, etc.). Não devem ser modificados, a menos que seja necessário ajustar a aparência ou comportamento da interface.
+
+Configuração no Marketing Cloud:
+
+1. Crie uma Installed Package no Marketing Cloud e adicione uma Custom Activity.
+2. Copie o `applicationExtensionKey` gerado e adicione-o ao arquivo `config.json`.
+3. Hospede a Custom Activity no Heroku (ou outro serviço de hospedagem).
+4. Configure as variáveis de ambiente no Heroku ou outro serviço de hospedagem).:
+   - `jwtSecret`: chave secreta para validar o JWT (obtida no Marketing Cloud).
+   - `MIDDLEWARE_AUTH_TOKEN`: token de autenticação para o middleware (endpoint).
+5. No Journey Builder, adicione a Custom Activity a uma jornada e configure os campos:
+   - Preencha o template, título, mensagem, URL da mídia (opcional), e URL (opcional).
+   - Selecione o campo da Data Extension que contém o `vucCode` na lista suspensa "Qual o vucCode?".
+   - Escolha a bandeira (businessUnit).
+6. Salve e execute a jornada.
+
+Funcionamento:
+
+- A Custom Activity permite enviar notificações personalizadas para uma central de notificações, usando dados de uma Data Extension.
+- O `vucCode` é obtido exclusivamente da Data Extension, selecionado via lista suspensa na UI. O campo "vucCode (Unitário)" foi removido para evitar erros e padronizar o uso do `vucCode` da DE.
+- O payload final enviado ao middleware contém: `template`, `title`, `message`, `mediaUrl`, `url`, `vucCode`, e `businessUnit`.
+
+Problemas Conhecidos:
+ 
+- **Campos criados na DE no Marketing Cloud são case sensitive**: sendo assim para facilitar a configuração da Custom Activity pelo usuário ele poderá usar qualquer nome para armazenar o vucCode desde que ele selecione qual dos campos da DE é o vucCode ao configurar a custom activity no journey builder.
+
+Dúvidas ou mais informações: vinicius.giglioli@nttdata.com ou viniciusgiglioli@gmail.com
