@@ -1,82 +1,127 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
+  <head>
     <title>Central de Notificações</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="images/icons/favicon.ico" />
 
     <!-- Arquivos CSS -->
-    <link rel="stylesheet" type="text/css" href="css/util.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/util.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
     <!-- Font Awesome para os ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
     <script
-        data-main="js/main.js"
-        type="text/javascript"
-        src="js/require.js"
-    >
-    </script>
-</head>
-<body>
+      data-main="js/main.js"
+      type="text/javascript"
+      src="js/require.js"
+    ></script>
+  </head>
+  <body>
     <div class="limiter">
-        <div class="container-login100">
-            <div class="wrap-login100">
-                <form id="notificationForm">
-                    <div class="login100-pic js-tilt" data-tilt>
-                        <!-- <img src="images/img-01.png" alt="IMG"> -->
-                    </div>
-                    <span class="login100-form-title">
-                        Central de Notificações
-                    </span>
-                    <div class="wrap-input100 validate-input" data-validate="Digite o template">
-                        <label for="template" class="label-form">Template</label>
-                        <input class="input100 input-form" type="text" id="template" placeholder="Insira o template" required>
-                        <span class="focus-input100"></span>
-                        <span class="symbol-input100">
-                            <i class="fa fa-tag" aria-hidden="true"></i>
-                        </span>
-                    </div>
+      <div class="container-login100">
+        <div class="wrap-login100">
+          <form id="notificationForm">
+            <div class="login100-pic js-tilt" data-tilt>
+              <img src="images/img-01.png" alt="IMG" />
+            </div>
+            <span class="login100-form-title"> Central de Notificações </span>
+            <div
+              class="wrap-input100 validate-input"
+              data-validate="Digite o template"
+            >
+              <label for="template" class="label-form">Template</label>
+              <input
+                class="input100 input-form"
+                type="text"
+                id="template"
+                placeholder="Insira o template"
+                required
+              />
+              <span class="focus-input100"></span>
+              <span class="symbol-input100">
+                <i class="fa fa-tag" aria-hidden="true"></i>
+              </span>
+            </div>
 
-                    <div class="wrap-input100 validate-input" data-validate="Digite o título">
-                        <label for="title" class="label-form">Título</label>
-                        <input class="input100 input-form" type="text" id="title" placeholder="Insira o título da notificação" required>
-                        <span class="focus-input100"></span>
-                        <span class="symbol-input100">
-                            <i class="fa fa-tag" aria-hidden="true"></i>
-                        </span>
-                    </div>
+            <div
+              class="wrap-input100 validate-input"
+              data-validate="Digite o título"
+            >
+              <label for="title" class="label-form">Título</label>
+              <input
+                class="input100 input-form"
+                type="text"
+                id="title"
+                placeholder="Insira o título da notificação"
+                required
+              />
+              <span class="focus-input100"></span>
+              <span class="symbol-input100">
+                <i class="fa fa-tag" aria-hidden="true"></i>
+              </span>
+            </div>
 
-                    <div class="wrap-input100 validate-input" data-validate="Digite a mensagem">
-                        <label for="message" class="label-form">Mensagem</label>
-                        <textarea class="input100 input-form" id="message" placeholder="Insira a mensagem da notificação" required style="resize: vertical;"></textarea>
-                        <span class="focus-input100"></span>
-                        <span class="symbol-input100">
-                            <i class="fa fa-comment" aria-hidden="true"></i>
-                        </span>
-                    </div>
+            <div
+              class="wrap-input100 validate-input"
+              data-validate="Digite a mensagem"
+            >
+              <label for="message" class="label-form">Mensagem</label>
+              <textarea
+                class="input100 input-form"
+                id="message"
+                placeholder="Insira a mensagem da notificação"
+                required
+                style="resize: vertical"
+              ></textarea>
+              <span class="focus-input100"></span>
+              <span class="symbol-input100">
+                <i class="fa fa-comment" aria-hidden="true"></i>
+              </span>
+            </div>
 
-                    <div class="wrap-input100">
-                        <label for="mediaUrl" class="label-form">URL da Mídia</label>
-                        <input class="input100 input-form" type="url" id="mediaUrl" placeholder="Insira a URL da mídia" pattern="https://.*" title="A URL deve começar com https://">
-                        <span class="focus-input100"></span>
-                    </div>
-                    <!-- Contêiner para a prévia da imagem -->
-                    <div id="mediaPreviewContainer" style="display: none;">
-                        <img id="mediaPreview" src="" alt="Prévia da Mídia" class="mediaPreview" />
-                    </div>
+            <div class="wrap-input100">
+              <label for="mediaUrl" class="label-form">URL da Mídia</label>
+              <input
+                class="input100 input-form"
+                type="url"
+                id="mediaUrl"
+                placeholder="Insira a URL da mídia"
+                pattern="https://.*"
+                title="A URL deve começar com https://"
+              />
+              <span class="focus-input100"></span>
+            </div>
+            <!-- Contêiner para a prévia da imagem -->
+            <div id="mediaPreviewContainer" style="display: none">
+              <img
+                id="mediaPreview"
+                src=""
+                alt="Prévia da Mídia"
+                class="mediaPreview"
+              />
+            </div>
 
-                    <div class="wrap-input100">
-                        <label for="url" class="label-form">URL</label>
-                        <input class="input100 input-form" type="url" id="url" placeholder="Insira a URL" pattern="https://.*" title="A URL deve começar com https://">
-                        <span class="focus-input100"></span>
-                    </div>
+            <div class="wrap-input100">
+              <label for="url" class="label-form">URL</label>
+              <input
+                class="input100 input-form"
+                type="url"
+                id="url"
+                placeholder="Insira a URL"
+                pattern="https://.*"
+                title="A URL deve começar com https://"
+              />
+              <span class="focus-input100"></span>
+            </div>
 
-                    <!-- Removido o campo para vucCode unitário -->
-                    <!--
+            <!-- Removido o campo para vucCode unitário -->
+            <!--
                     <div class="wrap-input100 validate-input" data-validate="Digite o vucCode">
                         <label for="vucCode" class="label-form">vucCode (Unitário)</label>
                         <input class="input100 input-form" type="text" id="vucCode" placeholder="Insira o vucCode para disparo individual">
@@ -84,45 +129,76 @@
                     </div>
                     -->
 
-                    <!-- Lista suspensa para selecionar o vucCode da Data Extension -->
-                    <div class="wrap-input100" style="text-align: center; border: 1px solid #cecece; border-radius: 5px; padding: 10px; margin-top: 10px;">
-                        <label for="vucCodeField" class="label-form">
-                            <p style="text-align: center;">Qual o vucCode?</p>
-                        </label>
-                        <select id="vucCodeField" name="vucCodeField" class="input100 input-form">
-                            <option value="">Selecione um campo da Data Extension</option>
-                            <!-- Opções serão preenchidas dinamicamente pelo JavaScript -->
-                        </select>
-                        <span class="focus-input100"></span>
-                    </div>
-
-                    <!-- Campo Business Unit -->
-                    <div class="wrap-input100 validate-input" data-validate="Selecione a bandeira">
-                        <label class="label-form">Escolha a Bandeira:</label>
-                        <div>
-                            <input type="radio" id="bandeira1" name="businessUnit" value="bandeira1" required>
-                            <label for="bandeira1">bandeira1</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="bandeira2" name="businessUnit" value="bandeira2" required>
-                            <label for="bandeira2">bandeira2</label>
-                        </div>
-                        <span class="focus-input100"></span>
-                    </div>
-
-                    <!-- Botão "Cadastrar" -->
-                    <div class="container-login100-form-btn">
-                        <button id="toggleActive" class="login100-form-btn">
-                            Cadastrar
-                        </button>
-                    </div>
-                </form>
+            <!-- Lista suspensa para selecionar o vucCode da Data Extension -->
+            <div
+              class="wrap-input100"
+              style="
+                text-align: center;
+                border: 1px solid #cecece;
+                border-radius: 5px;
+                padding: 10px;
+                margin-top: 10px;
+              "
+            >
+              <label for="vucCodeField" class="label-form">
+                <p style="text-align: center">Qual o vucCode?</p>
+              </label>
+              <select
+                id="vucCodeField"
+                name="vucCodeField"
+                class="input100 input-form"
+              >
+                <option value="">Selecione um campo da Data Extension</option>
+                <!-- Opções serão preenchidas dinamicamente pelo JavaScript -->
+              </select>
+              <span class="focus-input100"></span>
             </div>
+
+            <!-- Campo Business Unit -->
+            <div
+              class="wrap-input100 validate-input"
+              data-validate="Selecione a bandeira"
+            >
+              <label class="label-form">Escolha a Bandeira:</label>
+              <div>
+                <input
+                  type="radio"
+                  id="bandeira1"
+                  name="businessUnit"
+                  value="bandeira1"
+                  required
+                />
+                <label for="bandeira1">Drogasil</label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  id="bandeira2"
+                  name="businessUnit"
+                  value="bandeira2"
+                  required
+                />
+                <label for="bandeira2">Droga Raia</label>
+              </div>
+              <span class="focus-input100"></span>
+            </div>
+
+            <!-- Botão "Cadastrar" -->
+            <div class="container-login100-form-btn">
+              <button id="toggleActive" class="login100-form-btn">
+                Cadastrar
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
 
     <!-- Arquivos JavaScript -->
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-</body>
+    <script src="js/postmonger.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/customActivity.js"></script>
+  </body>
 </html>
