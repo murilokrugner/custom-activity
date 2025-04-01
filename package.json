@@ -4,7 +4,6 @@
   "description": "POC Central de Notificações",
   "main": "app.js",
   "scripts": {
-    "install": "npm install",
     "start": "node app.js"
   },
   "dependencies": {
